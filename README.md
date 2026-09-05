@@ -24,13 +24,13 @@ Set `DISCORD_TOKEN` before starting. Optional `STUDY_BUDDY_DB` selects the SQLit
 
 ## Automatic GitHub updates
 
-Run the root-level watchdog on the host that runs the bot:
+Run the root-level PowerShell updater on the host that runs the bot:
 
-```bash
-python update_and_restart.py
+```powershell
+.\update_and_restart.ps1
 ```
 
-It checks `origin/main` every five minutes, refuses to overwrite local changes, fast-forwards the checkout, installs updated dependencies, and restarts the bot process. Set `UPDATE_INTERVAL_SECONDS` to change the interval and `UPDATE_BRANCH` to use another branch. Keep `DISCORD_TOKEN` and other secrets in the host environment rather than in Git.
+It checks GitHub every five minutes, downloads and extracts the latest branch ZIP, then restarts the bot. It deliberately preserves `.env`, SQLite/database files, `data/`, `logs/`, and `.venv/`. Use `-Once` for a single update check, `-PollSeconds 60` for a one-minute interval, or `-InstallPath` when the bot lives in another directory. Keep `DISCORD_TOKEN` and other secrets in the host environment or `.env`, never in Git.
 
 ## Development
 
