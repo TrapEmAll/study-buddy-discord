@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import logging
+from pathlib import Path
 from datetime import datetime, timezone
 
 import discord
@@ -9,6 +10,7 @@ from discord import app_commands
 from discord.ext import commands, tasks
 
 from .service import StudyService
+from .config import load_config
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +137,8 @@ def create_bot() -> StudyBuddy:
 
 
 def main() -> None:
-    token = os.getenv("DISCORD_TOKEN")
-    if not token:
-        raise RuntimeError("DISCORD_TOKEN is required")
-    create_bot().run(token)
+    config = load_config(Path(__file__).resolve().parents[2])
+    for key in ("STUDY_BUDDY_DB", "DISCORD_GUILD_ID"):
+        if config.get(key):
+            os.environ[key] = config[key]
+    create_bot().run(config["DISCORD_TOKEN"])
