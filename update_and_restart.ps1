@@ -65,7 +65,7 @@ function Update-Checkout {
 }
 
 function Start-Bot {
-    return Start-Process -FilePath "python" -ArgumentList @("-m", "study_buddy") -WorkingDirectory $InstallPath -PassThru
+    return Start-Process -FilePath "python" -ArgumentList @("-m", "study_buddy") -WorkingDirectory $InstallPath -PassThru -NoNewWindow
 }
 
 $botProcess = $null

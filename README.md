@@ -20,7 +20,9 @@ pip install -e ".[dev]"
 python -m study_buddy
 ```
 
-Set `DISCORD_TOKEN` before starting. Optional `STUDY_BUDDY_DB` selects the SQLite path (default: `study_buddy.sqlite3`).
+On its first run, the bot prompts for the Discord bot token and development guild/server ID, then saves them to a local `.env` file. The token prompt is hidden. Press Enter without a guild ID to use global slash-command sync. `.env` is ignored by Git.
+
+You can also create `.env` manually from `.env.example`. `STUDY_BUDDY_DB` selects the SQLite path (default: `study_buddy.sqlite3`).
 
 ## Automatic GitHub updates
 
