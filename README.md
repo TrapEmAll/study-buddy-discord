@@ -22,6 +22,16 @@ python -m study_buddy
 
 Set `DISCORD_TOKEN` before starting. Optional `STUDY_BUDDY_DB` selects the SQLite path (default: `study_buddy.sqlite3`).
 
+## Automatic GitHub updates
+
+Run the root-level watchdog on the host that runs the bot:
+
+```bash
+python update_and_restart.py
+```
+
+It checks `origin/main` every five minutes, refuses to overwrite local changes, fast-forwards the checkout, installs updated dependencies, and restarts the bot process. Set `UPDATE_INTERVAL_SECONDS` to change the interval and `UPDATE_BRANCH` to use another branch. Keep `DISCORD_TOKEN` and other secrets in the host environment rather than in Git.
+
 ## Development
 
 ```bash
