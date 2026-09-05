@@ -49,8 +49,10 @@ function Update-Checkout {
         $arguments = @($source.FullName, $InstallPath, "/E", "/R:2", "/W:2", "/NFL", "/NDL", "/NJH", "/NJS")
         foreach ($directory in $excludedDirectories) { $arguments += @("/XD", (Join-Path $source.FullName $directory)) }
         foreach ($file in $excludedFiles) { $arguments += @("/XF", (Join-Path $source.FullName $file)) }
-        $result = Start-Process -FilePath "robocopy.exe" -ArgumentList $arguments -Wait -PassThru -NoNewWindow
-        if ($result.ExitCode -gt 7) { throw "File extraction failed with robocopy exit code $($result.ExitCode)." }
+        # Invoke the executable directly so PowerShell passes paths containing
+        # spaces as single arguments (Start-Process re-tokenizes ArgumentList).
+        & robocopy.exe @arguments
+        if ($LASTEXITCODE -gt 7) { throw "File extraction failed with robocopy exit code $LASTEXITCODE." }
 
         Set-Content -Path (Join-Path $InstallPath ".study-buddy-version") -Value $Commit -NoNewline
         Write-Host "Updated to $($Commit.Substring(0, 12))."
