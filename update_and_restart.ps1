@@ -68,6 +68,12 @@ function Start-Bot {
     return Start-Process -FilePath "python" -ArgumentList @("-m", "study_buddy") -WorkingDirectory $InstallPath -PassThru -NoNewWindow
 }
 
+function Install-Bot {
+    Write-Host "Installing Study Buddy package..."
+    & python -m pip install -e $InstallPath
+    if ($LASTEXITCODE -ne 0) { throw "Study Buddy package installation failed with exit code $LASTEXITCODE." }
+}
+
 $botProcess = $null
 try {
     while ($true) {
@@ -78,9 +84,11 @@ try {
         if ($remoteCommit -ne $localCommit) {
             Stop-Bot $botProcess
             Update-Checkout $remoteCommit
+            Install-Bot
             $botProcess = Start-Bot
             Write-Host "Started bot process $($botProcess.Id)."
         } elseif ($null -eq $botProcess -or $botProcess.HasExited) {
+            Install-Bot
             $botProcess = Start-Bot
             Write-Host "Started bot process $($botProcess.Id)."
         }
