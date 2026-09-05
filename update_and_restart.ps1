@@ -48,7 +48,9 @@ function Update-Checkout {
         $excludedFiles = @(".env", "*.sqlite3", "*.db", ".study-buddy-version")
         $arguments = @($source.FullName, $InstallPath, "/E", "/R:2", "/W:2", "/NFL", "/NDL", "/NJH", "/NJS")
         foreach ($directory in $excludedDirectories) { $arguments += @("/XD", (Join-Path $source.FullName $directory)) }
-        foreach ($file in $excludedFiles) { $arguments += @("/XF", (Join-Path $source.FullName $file)) }
+        # /XF receives file names/patterns, not full paths. Full paths with
+        # wildcards are rejected by Robocopy as invalid parameters.
+        foreach ($file in $excludedFiles) { $arguments += @("/XF", $file) }
         # Invoke the executable directly so PowerShell passes paths containing
         # spaces as single arguments (Start-Process re-tokenizes ArgumentList).
         & robocopy.exe @arguments
